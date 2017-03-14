@@ -3,6 +3,11 @@ const addEntriesObj = require('./mutable_data_entries').addEntriesObj;
 const addKeysObj = require('./mutable_data_keys').addKeysObj;
 const addValuesObj = require('./mutable_data_values').addValuesObj;
 var appTokens = require('./app_tokens');
+const nfsEmulate = require('./emulations/nfs').emulate;
+
+const EMULATORS = {
+  NFS: Symbol('NFS')
+};
 
 var md_handles = new Array();
 
@@ -315,5 +320,14 @@ module.exports.serialise = (appToken, mdHandle) => {
 **/
 module.exports.emulateAs = (appToken, mdHandle, eml) => {
   return appTokens.getApp(appToken)
-          .then((app) => md_handles[mdHandle].emulateAs(eml));
+          .then((app) => {
+            switch (EMULATORS[eml]) {
+              case EMULATORS['NFS']: {
+                return nfsEmulate(md_handles[mdHandle].emulateAs(eml));
+              }
+              default: {
+                return null;
+              }
+            }
+          });
 }

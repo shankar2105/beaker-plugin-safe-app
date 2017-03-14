@@ -43,9 +43,7 @@ module.exports.initialise = (appInfo) => {
 module.exports.connect = (appToken) => {
   return appTokens.getApp(appToken)
     .then((app) => app.auth.connectUnregistered())
-    .then((connectedApp) => {
-      return appToken;
-    });
+    .then(() => appToken);
 }
 
 /**
@@ -74,8 +72,26 @@ module.exports.authorise = (appToken, permissions, options) => {
 module.exports.connectAuthorised = (appToken, authUri) => {
   return appTokens.getApp(appToken)
     .then((app) => app.auth.loginFromURI(authUri))
-    .then((connectedApp) => appToken);
+    .then((connectedApp) => appTokens.replaceApp(appToken, connectedApp));
 }
+
+/**
+ * Authorise container request
+ * @returns {Promise<AuthURI>} auth granted URI
+ */
+module.exports.authoriseContainer = (appTokens, permissions) => {
+  return new Promise((resolve, reject) => {
+    appTokens.getApp(appToken)
+      .then((app) => app.auth.genContainerAuthUri(permissions)
+        .then((authReq) => ipc.sendAuthReq(authReq, (err, res) => {
+          if (err) {
+            return reject(new Error('Unable to authorise the application: ', err)); // TODO send Error in specific
+          }
+          return resolve(res);
+        })))
+      .catch(reject);
+  });
+
 
 module.exports.webFetch = (appToken, url) => {
   return appTokens.getApp(appToken)

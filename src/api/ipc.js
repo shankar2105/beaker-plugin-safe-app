@@ -1,7 +1,6 @@
 const crypto = require('crypto'); // electron deps will be avaible inside browser
 const ipcMain = require('electron').ipcMain; // electron deps will be avaible inside browser
-
-const genRandomToken = () => (crypto.randomBytes(32).toString('hex'));
+const genRandomToken = require('./helpers').genRandomToken;
 
 class IpcTask {
   constructor() {
