@@ -6,7 +6,7 @@ platform:
   - x64
 
 cache:
-  - node_modules -> appveyor.yml
+#  - node_modules
 
 clone_depth: 50
 
@@ -17,6 +17,8 @@ install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - node --version
   - npm --version
+  - git rm --cached native
+  - git rm --cached system_uri
   - npm i
 
 test_script:
