@@ -1,7 +1,7 @@
 {
   "name": "beaker-plugin-safe-app",
   "version": "0.1.0",
-  "description": "SAFE Browser add-on for web clientr to access SAFE Network",
+  "description": "SAFE Browser add-on for web client to access SAFE Network",
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./src *.js",
