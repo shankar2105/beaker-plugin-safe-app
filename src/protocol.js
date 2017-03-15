@@ -1,16 +1,16 @@
+/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
+const protocol = require('electron').protocol;
+/* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 const safeApp = require('safe-app');
 const urlParse = require('url').parse;
 const mime = require('mime');
-/* eslint-disable import/extensions */
-const protocol = require('electron').protocol;
-/* eslint-enable import/extensions */
 
 const safeScheme = 'safe';
 
 const appInfo = {
-  'id': 'net.maidsafe.app.browser',
-  'name': 'SAFE Browser',
-  'vendor': 'MaidSafe'
+  id: 'net.maidsafe.app.browser',
+  name: 'SAFE Browser',
+  vendor: 'MaidSafe'
 };
 
 let appObj = null;
@@ -30,7 +30,7 @@ const fetchData = (url) => {
   }
   return appObj.webFetch(url)
     .then((f) => appObj.immutableData.fetch(f.dataMapName))
-    .then((i) => i.read())
+    .then((i) => i.read());
 };
 
 const registerSafeAuthProtocol = () => {

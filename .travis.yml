@@ -1,0 +1,21 @@
+sudo: true
+
+os:
+  - linux
+  - osx
+
+language: node_js
+
+node_js:
+  - "6.9.0"
+
+cache:
+  directories:
+    - node_modules
+
+install:
+  - node --version
+  - npm --version
+
+script:
+  - npm test
