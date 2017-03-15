@@ -1,14 +1,4 @@
-const safe_app = require('safe-app');
-var appTokens = require('./app_tokens');
-
-var values_handles = new Array();
-
-const addValuesObj = (values) => {
-  values_handles[values.ref] = values;
-  return values.ref;
-}
-
-module.exports.addValuesObj = addValuesObj;
+const {genHandle, getObj} = require('./handles');
 
 module.exports.manifest = {
   len: 'promise',
@@ -22,8 +12,9 @@ module.exports.manifest = {
 * @returns {Promise<Number>}
 **/
 module.exports.len = (appToken, valuesHandle) => {
-  return appTokens.getApp(appToken)
-          .then((app) => values_handles[valuesHandle].len());
+  return getObj(appToken)
+          .then((app) => getObj(valuesHandle))
+          .then((values) => values.len());
 }
 
 /**
@@ -34,6 +25,7 @@ module.exports.len = (appToken, valuesHandle) => {
 * @returns {Promise<()>} - resolves once the iteration is done
 **/
 module.exports.forEach = (appToken, valuesHandle, fn) => {
-  return appTokens.getApp(appToken)
-          .then((app) => values_handles[valuesHandle].forEach(fn));
+  return getObj(appToken)
+          .then((app) => getObj(valuesHandle))
+          .then((values) => values.forEach(fn));
 }

@@ -1,4 +1,3 @@
-const crypto = require('crypto'); // electron deps will be avaible inside browser
 const genRandomToken = require('./helpers').genRandomToken;
 
 const app_tokens = new Map();

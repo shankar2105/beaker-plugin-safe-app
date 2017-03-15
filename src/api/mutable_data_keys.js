@@ -1,14 +1,4 @@
-const safe_app = require('safe-app');
-var appTokens = require('./app_tokens');
-
-var keys_handles = new Array();
-
-const addKeysObj = (keys) => {
-  keys_handles[keys.ref] = keys;
-  return keys.ref;
-}
-
-module.exports.addKeysObj = addKeysObj;
+const {genHandle, getObj} = require('./handles');
 
 module.exports.manifest = {
   len: 'promise',
@@ -22,8 +12,9 @@ module.exports.manifest = {
 * @returns {Promise<Number>}
 **/
 module.exports.len = (appToken, keysHandle) => {
-  return appTokens.getApp(appToken)
-          .then((app) => keys_handles[keysHandle].len());
+  return getObj(appToken)
+          .then((app) => getObj(keysHandle))
+          .then((keys) => keys.len());
 }
 
 /**
@@ -34,6 +25,7 @@ module.exports.len = (appToken, keysHandle) => {
 * @returns {Promise<()>} - resolves once the iteration is done
 **/
 module.exports.forEach = (appToken, keysHandle, fn) => {
-  return appTokens.getApp(appToken)
-          .then((app) => keys_handles[keysHandle].forEach(fn));
+  return getObj(appToken)
+          .then((app) => getObj(keysHandle))
+          .then((keys) => keys.forEach(fn));
 }

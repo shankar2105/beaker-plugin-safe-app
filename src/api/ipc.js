@@ -1,6 +1,5 @@
-const crypto = require('crypto'); // electron deps will be avaible inside browser
 const ipcMain = require('electron').ipcMain; // electron deps will be avaible inside browser
-const genRandomToken = require('./helpers').genRandomToken;
+const genRandomString = require('./helpers').genRandomString;
 
 class IpcTask {
   constructor() {
@@ -13,7 +12,7 @@ class IpcTask {
   }
 
   add(info, cb) {
-    const token = genRandomToken();
+    const token = genRandomString();
     this.tasks.push(token);
     this.tasksInfo[token] = { info, cb };
     this.next();
@@ -45,12 +44,10 @@ let ipcEvent = null;
 
 ipcMain.on('registerSafeApp', (event) => {
   ipcEvent = event;
-  console.log("registerSafeApp: ", ipcEvent);
 });
 
 ipcMain.on('webClientContainerRes', (event, res) => {
 	// handle response
-  console.log("webClientContainerRes");
   if (typeof ipcTask.currentTaskCb === 'function') {
     ipcTask.currentTaskCb(null, res);
   }
@@ -59,7 +56,6 @@ ipcMain.on('webClientContainerRes', (event, res) => {
 
 ipcMain.on('webClientAuthRes', (event, res) => {
   // handle response
-  console.log("webClientAuthRes");
   if (typeof ipcTask.currentTaskCb === 'function') {
     ipcTask.currentTaskCb(null, res);
   }
@@ -68,7 +64,6 @@ ipcMain.on('webClientAuthRes', (event, res) => {
 
 ipcMain.on('webClientErrorRes', (event, err) => {
   // handle Error
-  console.log("webClientErrorRes");
   if (typeof ipcTask.currentTaskCb === 'function') {
     ipcTask.currentTaskCb(err);
   }

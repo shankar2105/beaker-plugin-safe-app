@@ -1,14 +1,4 @@
-const safe_app = require('safe-app');
-var appTokens = require('./app_tokens');
-
-var entries_handles = new Array();
-
-const addEntriesObj = (entries) => {
-  entries_handles[entries.ref] = entries;
-  return entries.ref;
-}
-
-module.exports.addEntriesObj = addEntriesObj;
+const {genHandle, getObj} = require('./handles');
 
 module.exports.manifest = {
   len: 'promise',
@@ -26,8 +16,9 @@ module.exports.manifest = {
 * @returns {Promise<Number>}
 **/
 module.exports.len = (appToken, entriesHandle) => {
-  return appTokens.getApp(appToken)
-          .then((app) => entries_handles[entriesHandle].len());
+  return getObj(appToken)
+          .then((app) => getObj(entriesHandle))
+          .then((entries) => entries.len());
 }
 
 /**
@@ -39,8 +30,9 @@ module.exports.len = (appToken, entriesHandle) => {
 * @returns {Promise<ValueVersion>} - the value at the current version
 **/
 module.exports.get = (appToken, entriesHandle, keyName) => {
-  return appTokens.getApp(appToken)
-          .then((app) => entries_handles[entriesHandle].get(keyName));
+  return getObj(appToken)
+          .then((app) => getObj(entriesHandle))
+          .then((entries) => entries.get(keyName));
 }
 
 /**
@@ -51,8 +43,9 @@ module.exports.get = (appToken, entriesHandle, keyName) => {
 * @returns {Promise<()>} - resolves once the iteration is done
 **/
 module.exports.forEach = (appToken, entriesHandle, fn) => {
-  return appTokens.getApp(appToken)
-          .then((app) => entries_handles[entriesHandle].forEach(fn));
+  return getObj(appToken)
+          .then((app) => getObj(entriesHandle))
+          .then((entries) => entries.forEach(fn));
 }
 
 /**
@@ -67,18 +60,20 @@ module.exports.forEach = (appToken, entriesHandle, fn) => {
 * @returns {Promise<>}
 **/
 module.exports.insert = (appToken, entriesHandle, keyName, value) => {
-  return appTokens.getApp(appToken)
-          .then((app) => entries_handles[entriesHandle].insert(keyName, value));
+  return getObj(appToken)
+          .then((app) => getObj(entriesHandle))
+          .then((entries) => entries.insert(keyName, value));
 }
 
 /**
 * Start a new transaction of mutation of the entries
 * @param {String} appToken - the application token
 * @param {EntriesHandle} entriesHandle - the Entries obj handle
-* @return {Promise<EntryMutationTransaction>}
+* @return {Promise<MutationHandle>}
 **/
 module.exports.mutate = (appToken, entriesHandle) => {
-  return appTokens.getApp(appToken)
-          .then((app) => entries_handles[entriesHandle].mutate());
-//          .then(addMutationObj);
+  return getObj(appToken)
+          .then((app) => getObj(entriesHandle))
+          .then((entries) => entries.mutate())
+          .then(genHandle);
 }
