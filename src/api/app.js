@@ -1,6 +1,6 @@
 const safe_app = require('safe-app');
 const ipc = require('./ipc');
-const {genHandle, getObj} = require('./handles');
+const { genHandle, getObj } = require('./handles');
 
 module.exports.manifest = {
   initialise: 'promise',
@@ -44,10 +44,10 @@ module.exports.connect = (appToken) => {
 }
 
 /**
-* With the options object it can be opt for getting a container
-* for the app itself: opts.own_container=true
-* @returns {Promise<AuthURI>} auth granted URI
-*/
+ * With the options object it can be opt for getting a container
+ * for the app itself: opts.own_container=true
+ * @returns {Promise<AuthURI>} auth granted URI
+ */
 module.exports.authorise = (appToken, permissions, options) => {
   return new Promise((resolve, reject) => {
     getObj(appToken)
@@ -88,6 +88,7 @@ module.exports.authoriseContainer = (appTokens, permissions) => {
         })))
       .catch(reject);
   });
+}
 
 
 module.exports.webFetch = (appToken, url) => {
