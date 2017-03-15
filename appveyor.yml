@@ -10,15 +10,10 @@ cache:
 
 clone_depth: 50
 
-matrix:
-  fast_finish: true
-
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
   - node --version
   - npm --version
-  - git rm --cached native
-  - git rm --cached system_uri
   - npm i
 
 test_script:
