@@ -16,6 +16,7 @@ cache:
 install:
   - node --version
   - npm --version
+  - npm i
 
 script:
   - npm test
