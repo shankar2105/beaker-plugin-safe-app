@@ -28,6 +28,9 @@ cache:
   directories:
     - node_modules
 
+before_install:
+   - "[[ ${TRAVIS_OS_NAME} = linux ]] && export CXX=g++-4.8 || echo 'skipped'"
+
 install:
   - node --version
   - npm --version
