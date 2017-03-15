@@ -1,6 +1,6 @@
 const safe_app = require('safe-app');
 const ipc = require('./ipc');
-const { genHandle, getObj } = require('./handles');
+const { genHandle, getObj, replaceHandle } = require('./handles');
 
 module.exports.manifest = {
   initialise: 'promise',
@@ -69,16 +69,16 @@ module.exports.authorise = (appToken, permissions, options) => {
 module.exports.connectAuthorised = (appToken, authUri) => {
   return getObj(appToken)
     .then((app) => app.auth.loginFromURI(authUri))
-    .then((connectedApp) => appTokens.replaceApp(appToken, connectedApp));
+    .then((connectedApp) => replaceHandle(appToken, connectedApp));
 }
 
 /**
  * Authorise container request
  * @returns {Promise<AuthURI>} auth granted URI
  */
-module.exports.authoriseContainer = (appTokens, permissions) => {
+module.exports.authoriseContainer = (appToken, permissions) => {
   return new Promise((resolve, reject) => {
-    appTokens.getApp(appToken)
+    getObj(appToken)
       .then((app) => app.auth.genContainerAuthUri(permissions)
         .then((authReq) => ipc.sendAuthReq(authReq, (err, res) => {
           if (err) {

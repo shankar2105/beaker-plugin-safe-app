@@ -15,7 +15,7 @@ module.exports.create = (appToken, nfsHandle, content) => {
     .then(genHandle);
 };
 
-module.exports.fetch = (appTokens, nfsHandle, fileName) => {
+module.exports.fetch = (appToken, nfsHandle, fileName) => {
   return getObj(appToken)
     .then((app) => getObj(nfsHandle))
     .then((nfs) => nfs.fetch(fileName))
