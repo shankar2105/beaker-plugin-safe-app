@@ -4,9 +4,6 @@ environment:
 platform:
   - x64
 
-cache:
-  - node_modules
-
 clone_depth: 50
 
 matrix:
