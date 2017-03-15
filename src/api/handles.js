@@ -8,14 +8,6 @@ module.exports.genHandle = (obj) => {
   return randHandle;
 };
 
-module.exports.replaceHandle = (handle, obj) => {
-  if (!handles.has(handle)) {
-    return null;
-  }
-  handles.set(handle, obj);
-  return handle;
-};
-
 module.exports.getObj = (handle) => {
   return new Promise((resolve, reject) => {
     let obj = handles.get(handle);

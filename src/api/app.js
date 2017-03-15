@@ -1,6 +1,6 @@
 const safe_app = require('safe-app');
 const ipc = require('./ipc');
-const { genHandle, getObj, replaceHandle } = require('./handles');
+const { genHandle, getObj, freeObj } = require('./handles');
 
 module.exports.manifest = {
   initialise: 'promise',
@@ -69,7 +69,10 @@ module.exports.authorise = (appToken, permissions, options) => {
 module.exports.connectAuthorised = (appToken, authUri) => {
   return getObj(appToken)
     .then((app) => app.auth.loginFromURI(authUri))
-    .then((connectedApp) => replaceHandle(appToken, connectedApp));
+    .then((connectedApp) => {
+      freeObj(appToken);
+      return genHandle(connectedApp);
+    });
 }
 
 /**
