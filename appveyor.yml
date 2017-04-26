@@ -2,7 +2,6 @@ environment:
   nodejs_version: "6.9.0"
 
 platform:
-  - x86
   - x64
 
 cache:
