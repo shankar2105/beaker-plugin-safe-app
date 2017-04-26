@@ -15,5 +15,7 @@ install:
   - npm --version
   - npm i
 
+build: off
+
 test_script:
   - npm test
