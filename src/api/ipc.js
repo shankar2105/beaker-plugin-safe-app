@@ -72,6 +72,11 @@ ipcMain.on('webClientAuthRes', (event, res) => {
 
 ipcMain.on('webClientErrorRes', (event, err) => {
   // handle Error
+
+  if (err && err.toLowerCase() === 'unauthorised') {
+    return;
+  }
+
   if (typeof ipcTask.currentTaskCb === 'function') {
     ipcTask.currentTaskCb(err);
   }
