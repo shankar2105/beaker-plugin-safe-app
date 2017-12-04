@@ -125,14 +125,9 @@ const registerSafeProtocol = (sendToShell) => {
   }
   return initialiseSafeApp().then(() => {
     protocol.registerBufferProtocol(safeScheme, (req, cb) => {
-      const parsedUrl = urlParse(req.url);
-      const pathname = parsedUrl.pathname;
-      const fileExt = (pathname.substr(-1) === '/') ? 'html' : path.extname(pathname);
-      const mimeType = mime.lookup(fileExt);
-
       connectSafeApp()
         .then(() => fetchData(req.url))
-        .then((co) => cb({ mimeType, data: co }))
+        .then((data) => cb({ mimeType: data['Content-Type'], data: data.body }))
         .catch((err) => handleError(err, mimeType, cb));
     }, (err) => {
       if (err) console.error('Failed to register protocol');
